@@ -1,0 +1,181 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+	<edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470968/UI.xml?api=v2">
+		<edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="/jetCloud/apps/zjblessons/jblesson02/v01/01.xsodata/$metadata">
+		<edmx:Include Alias="Metadata" Namespace="jetCloud.apps.zjblessons.jblesson02.v01.01"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/cs02/vocabularies/Org.OData.Aggregation.V1.xml">
+		<edmx:Include Alias="Aggregation" Namespace="Org.OData.Aggregation.V1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/vocabularies/Org.OData.Capabilities.V1.xml">
+		<edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470974/Common.xml?api=v2">
+		<edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470971/Communication.xml?api=v2">
+		<edmx:Include Alias="vCard" Namespace="com.sap.vocabularies.Communication.v1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/vocabularies/Org.OData.Core.V1.xml">
+		<edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+	</edmx:Reference>
+	<edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/vocabularies/Org.OData.Measures.V1.xml">
+		<edmx:Include Alias="CQP" Namespace="Org.OData.Measures.V1"/>
+	</edmx:Reference>
+	<edmx:DataServices>
+		<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm"
+			Namespace="jbcourses-MasterDetailApp.annotations.annotation.jetCloud.apps.zjblessons.jblesson02.v01.01">
+			<Annotations Target="jetCloud.apps.zjblessons.jblesson02.v01.01.zjblessons_base_GroupsType">
+				<Annotation Term="UI.SelectionFields">
+					<Collection>
+						<PropertyPath>GroupText</PropertyPath>
+						<PropertyPath>Created</PropertyPath>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.PresentationVariant">
+					<Record Type="UI.PresentationVariantType">
+						<PropertyValue Property="SortOrder"/>
+						<PropertyValue Property="GroupBy"/>
+						<PropertyValue Property="TotalBy"/>
+						<PropertyValue Property="Total"/>
+						<PropertyValue Property="Visualizations"/>
+						<PropertyValue Property="RequestAtLeast">
+							<Collection/>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="UI.LineItem">
+					<Collection>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="GroupText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelGroupText}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="Created"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelCreated}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="GroupID"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelGroupID}"/>
+						</Record>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_SubGroupsType">
+				<Annotation Term="UI.LineItem">
+					<Collection>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="SubGroupText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelSubGroupText}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="Created"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelCreated}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="SubGroupID"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelSubGroupID}"/>
+						</Record>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.SelectionFields">
+					<Collection>
+						<PropertyPath>SubGroupText</PropertyPath>
+						<PropertyPath>Created</PropertyPath>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_PlantsType">
+				<Annotation Term="UI.LineItem">
+					<Collection>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="Created"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelCreated}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="PlantText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelPlanText}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="RegionText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelRegionText}"/>
+						</Record>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.SelectionFields">
+					<Collection>
+						<PropertyPath>Created</PropertyPath>
+						<PropertyPath>PlantText</PropertyPath>
+					</Collection>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_RegionsType">
+				<Annotation Term="UI.LineItem">
+					<Collection>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="Created"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelCreated}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="RegionID"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelRegionID}"/>
+						</Record>
+						<Record Type="UI.DataField">
+							<PropertyValue Property="Value" Path="RegionText"/>
+							<PropertyValue Property="Label" String="{@i18n&gt;labelRegionText}"/>
+						</Record>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.SelectionFields">
+					<Collection>
+						<PropertyPath>Created</PropertyPath>
+						<PropertyPath>RegionText</PropertyPath>
+					</Collection>
+					<Annotation Term="Common.Label" String="{@i18n&gt;labelRegionText}"/>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_SubGroupsType/SubGroupText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelSubGroupText}"/>
+				<Annotation Term="Common.ValueList">
+					<Record Type="Common.ValueListType">
+						<PropertyValue Property="CollectionPath" String="zjblessons_base_SubGroups"/>
+						<PropertyValue Property="Parameters">
+							<Collection>
+								<Record Type="Common.ValueListParameterInOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SubGroupText"/>
+									<PropertyValue Property="ValueListProperty" String="SubGroupText"/>
+								</Record>
+								<Record Type="Common.ValueListParameterOut">
+									<PropertyValue Property="LocalDataProperty" PropertyPath="SubGroupID"/>
+									<PropertyValue Property="ValueListProperty" String="SubGroupID"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_SubGroupsType/Created">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreated}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_GroupsType/Created">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreated}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_GroupsType/GroupText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelGroupText}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_PlantsType/Created">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreated}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_PlantsType/PlantText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelPlanText}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_RegionsType/Created">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelCreated}"/>
+			</Annotations>
+			<Annotations Target="Metadata.zjblessons_base_RegionsType/RegionText">
+				<Annotation Term="Common.Label" String="{@i18n&gt;labelRegionText}"/>
+			</Annotations>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>
