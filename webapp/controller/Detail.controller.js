@@ -132,28 +132,74 @@ sap.ui.define([
 
 			var aToolbarElements = [
 				new OverflowToolbarToggleButton({
-					icon: "{i18n>iChangeSelectionMode}"
+					icon: "{i18n>iChangeSelectionMode}",
+					text: "{i18n>ttChangeSelectionMode}",
+					tooltip: "{i18n>ttChangeSelectionMode}",
+					type: "Default",
+					visible: "{detailView>/button/visible/ChangeSelectionMode}",
+					pressed: "{detailView>/button/pressed/ChangeSelectionMode}",
+					press: this.onPressOnChangeSelectionMode.bind(this)
 				}),
 				new Button({
-					text: "{i18n>infSelectedItems} {detailView>/table/selectedItemsCount}"
+					text: "{i18n>infSelectedItems} {detailView>/table/selectedItemsCount}",
+					tooltip: "{i18n>ttResetSelections}",
+					type: "Default",
+					visible: "{= ${detailView>/table/selectedItemsCount} > 0 && ${detailView>/table/selectionMode} === 'MultiToggle'}",
+					enabled: true,
+					iconFirst: false
 				}),
 				new OverflowToolbarToggleButton({
-					icon: "{i18n>iDeactivateMode}"
+					icon: "{i18n>iDeactivateMode}",
+					text: "{i18n>ttDeactivateMode}",
+					tooltip: "{i18n>ttDeactivateMode}",
+					type: "Default",
+					visible: "{detailView>/button/visible/ChangeVersionMode}",
+					pressed: "{detailView>/button/pressed/ChangeVersionMode}",
+					press: this.onChangeVersionMode.bind(this)
 				}),
 				new ObjectStatus({
-					text: "{i18n>infDeactivatedModeOn}"
+					text: "{i18n>infDeactivatedModeOn}",
+					inverted: true,
+					state: "Warning",
+					visible: "{detailView>/button/pressed/ChangeVersionMode}"
 				}),
-				
+
 				new ToolbarSpacer(),
-				
+
 				new OverflowToolbarButton({
-					icon: "{i18n>iCreate}"
+					icon: "{i18n>iCreate}",
+					text: "{i18n>ttCreate}",
+					tooltip: "{i18n>ttCreate}",
+					type: "Default",
+					visible: "{detailView>/button/visible/Create}",
+					enabled: "{= !${detailView>/button/pressed/ChangeVersionMode} }",
+					press: this.onPressCreate.bind(this)
+				}),
+
+				new OverflowToolbarButton({
+					icon: "{i18n>iRefresh}",
+					text: "{i18n>ttRefresh}",
+					tooltip: "{i18n>ttRefresh}",
+					type: "Default",
+					visible: "{detailView>/button/visible/Refresh}",
+					press: this.onPressRefresh.bind(this)
 				}),
 				new OverflowToolbarButton({
-					icon: "{i18n>iCopy}"
+					icon: "{= (${detailView>/button/pressed/ChangeVersionMode}) ? ${i18n>iDelete} : ${i18n>iDeactivate}}",
+					text: "{= (${detailView>/button/pressed/ChangeVersionMode}) ? ${i18n>ttDelete} : ${i18n>ttDeactivate}}",
+					tooltip: "{= (${detailView>/button/pressed/ChangeVersionMode}) ? ${i18n>ttDelete} : ${i18n>ttDeactivate}}",
+					type: "Default",
+					visible: "{detailView>/button/visible/DeactivateDelete}",
+					press: this.onPressDeactivateDelete.bind(this)
 				}),
 				new OverflowToolbarButton({
-					icon: "{i18n>iRefresh}"
+					icon: "{i18n>iRestore}",
+					text: "{i18n>ttRestore}",
+					tooltip: "{i18n>ttRestore}",
+					type: "Default",
+					visible: "{detailView>/button/visible/Restore}",
+					enabled: "{= ${detailView>/table/selectedItemsCount} > 0 && ${detailView>/button/pressed/ChangeVersionMode}}",
+					press: this.onPressRestore.bind(this)
 				})
 			];
 
@@ -214,9 +260,102 @@ sap.ui.define([
 			this.getView().byId("page").addHeaderContent(this._oSmartFilterBar);
 		},
 
+		onPressOnChangeSelectionMode: function(oEvent) {
+			this.getModel("detailView").setProperty("/table/selectionMode", oEvent.getParameter("pressed") ? "Multi" : "Single");
+		},
+
+		onChangeVersionMode: function() {
+			this._oSmartTable.rebindTable();
+		},
+
+		onPressRefresh: function(oEvent) {
+			this._oSmartTable.rebindTable(true);
+			var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			var stext = oResourceBundle.getText("msgRefreshTable");
+			MessageToast.show(stext);
+		},
+
+		onPressDeactivateDelete: function(oEvent) {
+			let aSelectedContexts = this._oTable.getSelectedIndices()
+				.map(iSelectedIndex => this._oTable.getContextByIndex(iSelectedIndex));
+			if (this.getModel("detailView").getProperty("/button/pressed/ChangeVersionMode")) {
+				MessageBox.confirm(this.getResourceBundle().getText("msgDelete"), {
+					onClose: oAction => {
+						if (oAction === MessageBox.Action.OK) {
+							aSelectedContexts.forEach(oContext => {
+								this.getModel().remove(oContext.getPath(), {
+									success: () => {
+										MessageToast.show("msgSuccessDelete");
+									}
+								});
+							});
+						}
+					}
+				});
+			} else {
+				MessageBox.confirm(this.getResourceBundle().getText("msgDeactivate"), {
+					onClose: oAction => {
+						if (oAction === MessageBox.Action.OK) {
+							aSelectedContexts.forEach(oContext => {
+								this.getModel().setProperty(oContext.getPath() + "/Version", "D");
+							});
+							this.getModel().submitChanges({
+								success: () => {
+									MessageToast.show("msgSuccessDeactivate");
+								}
+							});
+						}
+					}
+				});
+			}
+		},
+
+		onPressRestore: function(oEvent) {
+			let aSelectedContexts = this._oTable.getSelectedIndices()
+				.map(iSelectedIndex => this._oTable.getContextByIndex(iSelectedIndex));
+			MessageBox.confirm(this.getResourceBundle().getText("msgRestore"), {
+				onClose: oAction => {
+					if (oAction === MessageBox.Action.OK) {
+						aSelectedContexts.forEach(oContext => {
+							this.getModel().setProperty(oContext.getPath() + "/Version", "A");
+						});
+						this.getModel().submitChanges({
+							success: () => {
+								MessageToast.show("msgSuccessRestore");
+							}
+						});
+					}
+				}
+			});
+		},
+
 		onSelectionChange: function() {
 			this.getModel("detailView").setProperty("/table/selectedItemsCount", this._oTable.getSelectedIndices().length);
 
+		},
+
+		onPressCreate: function() {
+			if (!this._oDialog) {
+				this._oDialog = sap.ui.xmlfragment("jetcourses.MasterDetailApp.view.CreateEditGroup");
+				this.getView().addDependent(this._oDialog);
+			}
+			return this._oDialog.open();
+		},
+
+		onPressOKCreate: function(oEvent) {
+			this.getModel().submitChanges({
+				success: () => {
+					MessageToast.show(this.getResourceBundle().getText("msgSuccessCreate"));
+				}
+			});
+			this._oDialog.destroy();
+			this._oDialog = null;
+		},
+
+		onPressCancel: function(oEvent) {
+			this.getModel().resetChanges();
+			this._oDialog.destroy();
+			this._oDialog = null;
 		},
 
 		_onBeforeRebindTable: function(oEvent) {

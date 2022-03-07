@@ -1,14 +1,9 @@
-<mvc:View
-	controllerName="jetcourses.MasterDetailApp.controller.Detail"
-	xmlns="sap.m"
-	xmlns:mvc="sap.ui.core.mvc"
-xmlns:semantic="sap.f.semantic">
-
+<mvc:View controllerName="jetcourses.MasterDetailApp.controller.Detail" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic">
 	<semantic:SemanticPage id="page" class="sapUiNoContentPadding" busyIndicatorDelay="{detailView>/delay}">
 		<semantic:titleHeading>
 			<Title id="thDetail" level="H2"/>
 		</semantic:titleHeading>
 		<semantic:content></semantic:content>
 	</semantic:SemanticPage>
-
 </mvc:View>
