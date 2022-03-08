@@ -234,6 +234,26 @@ sap.ui.define([
 			this._oTable.setSelectionMode("Single");
 			this._oTable.setSelectionBehavior("Row");
 			this._oTable.attachRowSelectionChange(this.onSelectionChange.bind(this));
+			this._oTable.addColumn(new sap.ui.table.Column({
+				template: new sap.m.Input({
+					value: "{"+sEntity.substring(0, sEntity.length - 1)+"Text" +"}",
+					width: "200px"
+				}),
+				label: new sap.m.Label({
+					text: this.getResourceBundle().getText(sEntity).split('').reverse().join('') + " 'r07e'",
+					width: "200px"
+				}),
+				customData: [
+					new sap.ui.core.CustomData({
+						key: "p13nData",
+						value: {
+							"columnKey": sEntity.substring(0, sEntity.length - 1) + "Text",
+							"leadingProperty": sEntity.substring(0, sEntity.length - 1) + "Text",
+							"columnIndex": "2"
+						}
+					})
+				]
+			}));
 
 			this.getModel("detailView").setProperty("/table/selectedItemsCount", 0);
 			this.getModel("detailView").setProperty("/table/selectionMode", "Single");
@@ -246,7 +266,8 @@ sap.ui.define([
 						icon: "{i18n>iEdit}",
 						type: "Custom",
 						text: "{i18n>ttEdit}",
-						visible: "{= ${detailView>/button/visible/Update} && !${detailView>/button/pressed/ChangeVersionMode} }"
+						visible: "{= ${detailView>/button/visible/Update} && !${detailView>/button/pressed/ChangeVersionMode} }",
+						press: this._onPressUpdate.bind(this)
 					})
 				]
 			});
@@ -335,11 +356,22 @@ sap.ui.define([
 		},
 
 		onPressCreate: function() {
-			if (!this._oDialog) {
-				this._oDialog = sap.ui.xmlfragment("jetcourses.MasterDetailApp.view.CreateEditGroup");
-				this.getView().addDependent(this._oDialog);
-			}
-			return this._oDialog.open();
+			sap.ui.core.Fragment.load({
+				name: "jetcourses.MasterDetailApp.view.CreateEditGroup",
+				controller: this
+			}).then(oDialog => {
+				let oContext = this.getModel().createEntry(this._oSmartTable.getEntitySet(), {
+					properties: {
+						GroupID: "",
+						Version: "A",
+						Language: "RU"
+					}
+				});
+				this.getView().addDependent(oDialog);
+				oDialog.setBindingContext(oContext);
+				oDialog.open();
+				this._oDialog = oDialog;
+			});
 		},
 
 		onPressOKCreate: function(oEvent) {
@@ -356,6 +388,20 @@ sap.ui.define([
 			this.getModel().resetChanges();
 			this._oDialog.destroy();
 			this._oDialog = null;
+		},
+		
+		_onPressUpdate: function(oEvent) {
+			let oContext = oEvent.getSource().getBindingContext();
+			sap.ui.core.Fragment.load({
+					name: "jetcourses.MasterDetailApp.view.CreateEditGroup",
+					controller: this
+				})
+				.then(oDialog => {
+					this.getView().addDependent(oDialog);
+					oDialog.setBindingContext(oContext);
+					oDialog.open();
+					this._oDialog = oDialog;
+				});
 		},
 
 		_onBeforeRebindTable: function(oEvent) {
